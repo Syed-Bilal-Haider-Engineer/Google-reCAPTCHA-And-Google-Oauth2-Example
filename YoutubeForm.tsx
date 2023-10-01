@@ -35,9 +35,7 @@ export const YoutubeForm = () => {
   });
 
 const {register,control, handleSubmit,formState , getValues,setValue,reset} = channelForm;
-console.log("formState---",formState);
 const {errors,dirtyFields,touchedFields, isDirty , isValid, isSubmitSuccessful} = formState;
-
 useEffect(()=>{
   if(isSubmitSuccessful){
     reset();
