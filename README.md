@@ -1,5 +1,5 @@
 
-### Testing Google reCAPTCHA Integration with Frontend and Backend & Implementing `useForm` Hook
+### Testing Google reCAPTCHA Integration And Google-Oauth2  with Frontend and Backend & Implementing `useForm` Hook
 
 To ensure the effectiveness of Google reCAPTCHA and improve your form handling practices, follow these steps:
 
@@ -29,5 +29,10 @@ To ensure the effectiveness of Google reCAPTCHA and improve your form handling p
    **Testing:**
    - Test the `useForm` hook to ensure it correctly manages form state and handles form submissions.
    - Validate that the hook integrates seamlessly with the reCAPTCHA functionality and other form elements.
+#### 3. Google OAuth2 Integration
+   - This Node.js application features Google OAuth2 authentication, enabling secure user login via Google accounts. 
+   - The integration uses Google's OAuth2.0 credentials to authenticate users. 
+   - Upon successful login, an index.html page is generated dynamically, displaying user-specific information retrieved from Google's services. 
+   - This implementation ensures a seamless and secure authentication process for users, leveraging Google's robust authentication infrastructure.
 
-By following these steps, you will ensure both a robust Google reCAPTCHA integration and effective form handling using a custom `useForm` hook. This approach will enhance your form security and user experience while practicing advanced form management techniques.
+By following these steps, you will ensure both a robust Google reCAPTCHA integration, Google-Oauth2 and effective form handling using a custom `useForm` hook. This approach will enhance your form security and user experience while practicing advanced form management techniques.
