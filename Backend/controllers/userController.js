@@ -1,7 +1,6 @@
 import User from '../Models/User.js';
 import axios from 'axios';
-const SECRET = '';
-
+import 'dotenv/config'
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User?.find();
@@ -20,7 +19,7 @@ export const create = async (req, res) => {
     try {
         const { username, email, channel, age, dob, social, phoneNumber,phNumber,valueReCapcha } = req.body;
 
-        const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${SECRET}&response=${valueReCapcha}`);
+        const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.BackEndSecret}&response=${valueReCapcha}`);
         const data = response.data;
     
         if (data.success) {
