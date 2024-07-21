@@ -40,7 +40,9 @@ By following these steps, you will ensure both a robust Google reCAPTCHA integra
 
 #### reCAPTCHA 
 Client side:
+
 import ReCAPTCHA from 'react-google-recaptcha';
+
   function onChange(value: any) {
    console.log(value);
   }
@@ -52,8 +54,11 @@ import ReCAPTCHA from 'react-google-recaptcha';
     ref={recaptchaRef}
   />
 Server side:
+
 const { valueReCapcha } = req.body;
+
 const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.BackEndSecret}&response=${valueReCapcha}`);
+
 const data = response.data;
 
 #### Google Oauth2
@@ -65,15 +70,25 @@ Server side:
 
 2:
 import express from 'express';
+
 import 'dotenv/config';
+
 import session from 'express-session';
+
 import passport from 'passport';
+
 import { fileURLToPath } from 'url';
+
 import path from 'path';
+
 import './controllers/auth.js';
+
 const app = express();
+
 const PORT = process.env.PORT || 4001;
+
 const __filename = fileURLToPath(import.meta.url);
+
 const __dirname = path.dirname(__filename);app.use(
   session({
     secret: process.env.SESSION_SECRET || 'mysecret',
@@ -82,25 +97,32 @@ const __dirname = path.dirname(__filename);app.use(
     cookie: { secure: false },
   })
 );
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 // Static files
 app.use(express.static(path.join(__dirname, './index.html')));
+
 
 // Authentication check middleware
 function isLoggedIn(req, res, next) {
   req.user ? next() : res.sendStatus(401);
 }
 
+
 // Routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['email', 'profile'] })
 );
+
 
 app.get('/auth/google/callback',
   passport.authenticate('google', {
@@ -109,19 +131,23 @@ app.get('/auth/google/callback',
   })
 );
 
+
 app.get('/auth/google/failure', (req, res) => {
   res.send('Something went wrong!');
 });
+
 
 app.get('/auth/protected', isLoggedIn, (req, res) => {
   let name = req.user.displayName;
   res.send(`Hello ${name}`);
 });
 
+
 app.use('/auth/logout', (req, res) => {
   req.session.destroy();
   res.send('See you again!');
 });
+
 
 app.use('/auth/google/success', (req, res) => {
   res.send('Login successfully!');
