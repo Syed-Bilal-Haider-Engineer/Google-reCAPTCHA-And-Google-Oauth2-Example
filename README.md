@@ -36,3 +36,95 @@ To ensure the effectiveness of Google reCAPTCHA and improve your form handling p
    - This implementation ensures a seamless and secure authentication process for users, leveraging Google's robust authentication infrastructure.
 
 By following these steps, you will ensure both a robust Google reCAPTCHA integration, Google-Oauth2 and effective form handling using a custom `useForm` hook. This approach will enhance your form security and user experience while practicing advanced form management techniques.
+
+
+#### reCAPTCHA 
+Client side:
+import ReCAPTCHA from 'react-google-recaptcha';
+  function onChange(value: any) {
+   console.log(value);
+  }
+
+  <ReCAPTCHA
+    style={{display: 'inline-block'}}
+    sitekey={secrete_site_key}
+    onChange={onChange}
+    ref={recaptchaRef}
+  />
+Server side:
+const { valueReCapcha } = req.body;
+const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.BackEndSecret}&response=${valueReCapcha}`);
+const data = response.data;
+
+#### Google Oauth2
+Cient side:
+<a href="auth/google"> login with Login </a>
+
+Server side:
+1: auth.js file
+
+2:
+import express from 'express';
+import 'dotenv/config';
+import session from 'express-session';
+import passport from 'passport';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import './controllers/auth.js';
+const app = express();
+const PORT = process.env.PORT || 4001;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'mysecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Static files
+app.use(express.static(path.join(__dirname, './index.html')));
+
+// Authentication check middleware
+function isLoggedIn(req, res, next) {
+  req.user ? next() : res.sendStatus(401);
+}
+
+// Routes
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['email', 'profile'] })
+);
+
+app.get('/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/auth/google/success',
+    failureRedirect: '/auth/google/failure',
+  })
+);
+
+app.get('/auth/google/failure', (req, res) => {
+  res.send('Something went wrong!');
+});
+
+app.get('/auth/protected', isLoggedIn, (req, res) => {
+  let name = req.user.displayName;
+  res.send(`Hello ${name}`);
+});
+
+app.use('/auth/logout', (req, res) => {
+  req.session.destroy();
+  res.send('See you again!');
+});
+
+app.use('/auth/google/success', (req, res) => {
+  res.send('Login successfully!');
+});
+
+
